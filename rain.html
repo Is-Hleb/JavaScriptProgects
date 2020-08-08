@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 0;
+            background: black;
+            display: block;
+            margin: 0;
+        }
+
+        canvas {
+            width: 100%;
+            border: solid 5px black;
+            margin: 0;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+<script type="text/javascript">
+
+    let canvas = new function () {
+        let canv = document.getElementById('canvas');
+        canv.width = window.innerWidth;
+        canv.height = window.innerHeight;
+        this.w = canv.width;
+        this.h = canv.height;
+        this.ctx = canv.getContext('2d');
+    };
+
+    let g = 0.1;
+    let rain = [];
+
+    class drop {
+        constructor() {
+            this.x = Math.random() * canvas.w;
+            this.y = 0 - Math.random() * 10;
+            this.z = Math.random() * 0.5;
+            this.w = 10 * this.z;
+            this.h = 10 * this.z;
+            this.weight = 2;
+            this.speed = 4 * this.z;
+        }
+
+        main() {
+            this.y += this.speed;
+            this.speed += g * this.weight;
+            if (this.y > canvas.h) {
+                this.y = 0 - Math.random() * 10;
+                this.speed = Math.random() * 10;
+            }
+
+
+
+            canvas.ctx.fillRect(this.x, this.y, this.w, this.h);
+        }
+    }
+
+    function init() {
+        for (let i = 0; i <= 2000; i++)
+            rain[i] = new drop();
+    }
+
+    function draw() {
+        canvas.ctx.clearRect(0, 0, canvas.w, canvas.h);
+        canvas.ctx.fillStyle = '#18bbed';
+        for (let i = 0; i < rain.length; i++) {
+            rain[i].main();
+        }
+    }
+
+    init();
+
+
+    function main() {
+        draw();
+        requestAnimationFrame(main);
+    }
+
+    main();
+
+</script>
+</body>
+</html>
